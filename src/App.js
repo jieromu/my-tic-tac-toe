@@ -13,7 +13,6 @@ function Square(props) {
   return (
       <button 
         className="square"
-        style={{ height: 50, width: 50, marginTop: 5}}
         onClick={props.onClick}>
           {props.value}
       </button>
@@ -79,7 +78,7 @@ class Game extends react.Component {
   
   render() {
     return (
-      <div className="game">
+      <div className="game" >
         <div className="game-board">
           <Board />
         </div>
