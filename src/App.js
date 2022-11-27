@@ -30,58 +30,20 @@ function ResetButton(props) {
 }
 
 class Board extends react.Component {
-  
-  constructor(props){
-    super(props);
-    this.state = {
-      squares: Array(9).fill(null),
-      xIsNext: true,
-    };
-  }
-  
-  handleClick(i) {
-    const squares = this.state.squares.slice();
-    if(determineWinner(squares) || squares[i]){
-      return;
-    }
-    squares[i] = this.state.xIsNext ? 'X':'O';
-    this.setState({
-        squares: squares,
-        xIsNext: !this.state.xIsNext,
-      });
-  }
-  
-  resetGame() {
-    {console.log("reset Game")}
-    this.setState({
-        squares: Array(9).fill(null),
-        xIsNext: true,
-      });
-  }
-  
+   
   renderSquare(i) {
     return (
       <Square 
-        value={this.state.squares[i]}
-        onClick={() => this.handleClick(i)}
+        value={this.props.squares[i]}
+        onClick={() => this.props.onClick(i)}
       />     
     );
   }
   
   render() {
-    
-    const winner = determineWinner(this.state.squares);
-    let status;
-    if(winner){
-      status = "Winner is " + winner;
-    }
-    else{
-      status = "Next Player: " + (this.state.xIsNext ? 'X':'O');
-    }
-    
     return (
       <div>
-        <div className="displayStatus">{status}</div>
+        <div className="displayStatus">{this.props.status}</div>
         <div className="board-row">
           {this.renderSquare(0)}
           {this.renderSquare(1)}
@@ -96,13 +58,7 @@ class Board extends react.Component {
           {this.renderSquare(6)}
           {this.renderSquare(7)}
           {this.renderSquare(8)}
-        </div>
-        <div className="reset-row">
-          <ResetButton 
-            value={'Reset Game'}
-            onClick={() => this.resetGame()}
-          />
-        </div>
+        </div>        
       </div>
     );
   }
@@ -110,12 +66,74 @@ class Board extends react.Component {
 
 class Game extends react.Component {
   
+  constructor(props) {
+    super(props);
+    this.state = {
+      history: [{
+        squares: Array(9).fill(null),
+      }],
+      xIsNext: true,
+      isInitalise: true,
+    }
+  }
+    
+  resetGame() {
+    {console.log("reset Game")}
+    this.setState({
+      history: [{
+        squares: Array(9).fill(null),
+      }],
+      xIsNext: true,
+      isInitalise: true,
+    });
+  }
+  
+  handleClick(i) {
+    const historyBoards = this.state.history;
+    const currentBoard = historyBoards[historyBoards.length-1];
+    const squares = currentBoard.squares.slice();
+    const winner = determineWinner(currentBoard.squares);
+    if(winner || squares[i]){
+      return;
+    }
+    squares[i] = this.state.xIsNext ? 'X':'O';
+    this.setState({
+        history: historyBoards.concat(
+          [{
+            squares: squares,
+        }]),             
+        xIsNext: !this.state.xIsNext,
+        isInitalise: this.state.isInitalise ? false:false,
+    });    
+  }
+    
   render() {
+    
+    const historyBoards = this.state.history;
+    const currentBoard = historyBoards[historyBoards.length-1];    
+    const winner = determineWinner(currentBoard.squares);
+    
+    let status;
+    if(this.state.isInitalise){
+      status = "First Player is: X"
+    }
+    else{
+      status = winner ? "Winner is " + winner : "Next Player: " + (this.state.xIsNext ? 'X':'O')
+    }
+            
     return (
       <div className="game" >
         <div className="game-board">
-          <Board />
-        </div>
+          <Board
+            squares={currentBoard.squares}
+            status={status}
+            onClick={(i) => this.handleClick(i)}          
+          />
+          <ResetButton 
+            value={'Reset Game'}
+            onClick={() => this.resetGame()}
+          />       
+        </div>        
         <div className="game-info">
           <div>{/* For Status Update*/}</div>
           <ol>{/* ToDO */}</ol>
