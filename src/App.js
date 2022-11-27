@@ -19,6 +19,16 @@ function Square(props) {
   );
 }
 
+function ResetButton(props) {
+  return (
+      <button 
+        className="resetButton"
+        onClick={props.onClick}>
+          {props.value}
+      </button>
+  );
+}
+
 class Board extends react.Component {
   
   constructor(props){
@@ -42,6 +52,7 @@ class Board extends react.Component {
   }
   
   resetGame() {
+    {console.log("reset Game")}
     this.setState({
         squares: Array(9).fill(null),
         xIsNext: true,
@@ -87,10 +98,10 @@ class Board extends react.Component {
           {this.renderSquare(8)}
         </div>
         <div className="reset-row">
-          <button 
-            className="resetButton" onClick={this.resetGame()}>
-              Reset Game
-          </button>
+          <ResetButton 
+            value={'Reset Game'}
+            onClick={() => this.resetGame()}
+          />
         </div>
       </div>
     );
