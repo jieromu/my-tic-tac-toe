@@ -41,6 +41,13 @@ class Board extends react.Component {
       });
   }
   
+  resetGame() {
+    this.setState({
+        squares: Array(9).fill(null),
+        xIsNext: true,
+      });
+  }
+  
   renderSquare(i) {
     return (
       <Square 
@@ -78,6 +85,12 @@ class Board extends react.Component {
           {this.renderSquare(6)}
           {this.renderSquare(7)}
           {this.renderSquare(8)}
+        </div>
+        <div className="reset-row">
+          <button 
+            className="resetButton" onClick={this.resetGame()}>
+              Reset Game
+          </button>
         </div>
       </div>
     );

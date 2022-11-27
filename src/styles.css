@@ -33,6 +33,15 @@ ol, ul {
   width: 50px;
 }
 
+.resetButton {
+  background: #fff;
+  border: 2px solid #999;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+}
+
 .square:focus {
   outline: none;
 }
