@@ -72,6 +72,8 @@ class Game extends react.Component {
       history: [{
         squares: Array(9).fill(null),
       }],
+      /*An Array to store the position of the markers on the square grid*/
+      locationArray: Array(9).fill(null),
       stepNumber: 0,
       xIsNext: true,
       isInitalise: true,
@@ -84,6 +86,8 @@ class Game extends react.Component {
       history: [{
         squares: Array(9).fill(null),
       }],
+      /*An Array to store the position of the markers on the square grid*/
+      locationArray: Array(9).fill(null),
       stepNumber: 0,
       xIsNext: true,
       isInitalise: true,
@@ -95,6 +99,11 @@ class Game extends react.Component {
     const currentBoard = historyBoards[historyBoards.length-1];
     const squares = currentBoard.squares.slice();
     const winner = determineWinner(currentBoard.squares);
+    
+    /*Similar to the history baords, to get the position of the array 
+    based on the current selected step number */
+    const locationArray = this.state.locationArray.slice(0, this.state.stepNumber + 1)
+    
     if(winner || squares[i]){
       return;
     }
@@ -104,6 +113,7 @@ class Game extends react.Component {
           [{
             squares: squares,
         }]),
+        locationArray: locationArray.concat(i),
         stepNumber: historyBoards.length,             
         xIsNext: !this.state.xIsNext,
         isInitalise: this.state.isInitalise ? false:false,
@@ -123,9 +133,22 @@ class Game extends react.Component {
     const currentBoard = historyBoards[this.state.stepNumber];    
     const winner = determineWinner(currentBoard.squares);
     
+    /*Get the current state of the location array */
+    const locationArray = this.state.locationArray;
+    
     const moves = historyBoards.map((squareArray, step) => {
+      
+      /*Retrieve the location of the square based on the step */
+      const squareLocation = locationArray[step];
+      
+      /*Retrieve the col and row info based on the square location */
+      const position = getSquarePosition(squareLocation);
+      
+      /*Retrieve the marker in the square location of the most recent square board */
+      const marker = historyBoards[historyBoards.length-1].squares[squareLocation];
+      
       const desc = step ?
-                    "Go to Move #: " + step :
+                    "Go to Move #: " + step + "   (" + marker + " at " + position + ")" :
                     "Go to Game Start";
       return (
         <li key={step}>
@@ -162,6 +185,23 @@ class Game extends react.Component {
       </div>
     );
   }
+}
+
+function getSquarePosition(selectedSquare) {
+  const squareGrid = new Map([
+    [0, "Col: 1, Row: 1"],
+    [1, "Col: 2, Row: 1"],
+    [2, "Col: 3, Row: 1"],
+    [3, "Col: 1, Row: 2"],
+    [4, "Col: 2, Row: 2"],
+    [5, "Col: 3, Row: 2"],
+    [6, "Col: 1, Row: 3"],
+    [7, "Col: 2, Row: 3"],
+    [8, "Col: 3, Row: 3"],
+  ]);
+  
+  return(squareGrid.get(selectedSquare));
+  
 }
 
 function determineWinner(squares) {
