@@ -31,16 +31,47 @@ function ResetButton(props) {
 
 class Board extends react.Component {
    
-  renderSquare(i) {
+  renderSquare(key,value) {
     return (
-      <Square 
-        value={this.props.squares[i]}
-        onClick={() => this.props.onClick(i)}
-      />     
+        <Square
+          key={key}
+          value={this.props.squares[value]}
+          onClick={() => this.props.onClick(value)}
+        />     
+    );
+  }
+    
+  render() {
+    
+    /* Included codes to render the board squares by using loops and Array Maps */
+    const rowArray = [0,3,6];
+    const colArray = [0,1,2];
+    
+    const gameBoard = rowArray.map((rowValue, row) => {
+      const boardSquares = colArray.map((colValue, col) => {
+        const squareKey = col+rowValue;
+        const squareValue = colValue+rowValue;
+        return (
+          this.renderSquare(squareKey, squareValue)
+        );
+      });
+      return (
+        <div
+          key={row}
+          className="board-row">
+          {boardSquares}
+        </div>
+      );
+    });
+    return (
+      <div>
+        <div className="displayStatus">{this.props.status}</div>
+        {gameBoard}           
+      </div>
     );
   }
   
-  render() {
+ /* render() {
     return (
       <div>
         <div className="displayStatus">{this.props.status}</div>
@@ -53,15 +84,15 @@ class Board extends react.Component {
           {this.renderSquare(3)}
           {this.renderSquare(4)}
           {this.renderSquare(5)}
-        </div>  
+        </div>
         <div className="board-row">
           {this.renderSquare(6)}
           {this.renderSquare(7)}
           {this.renderSquare(8)}
-        </div>        
+        </div>            
       </div>
     );
-  }
+  } */
 }
 
 class Game extends react.Component {
