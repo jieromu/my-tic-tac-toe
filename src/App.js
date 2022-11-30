@@ -137,9 +137,7 @@ class Game extends react.Component {
     const locationArray = this.state.locationArray;
     
     const moves = historyBoards.map((squareArray, step) => {
-      
-      console.log(this.state.stepNumber);
-      
+       
       /*Retrieve the location of the square based on the step */
       const squareLocation = locationArray[step];
       
@@ -151,17 +149,21 @@ class Game extends react.Component {
       
       let jumpButtonStyle;
       
-      /*To bold the jump button depending on which step being selected*/
+      /*To change the styling of the jump button depending on which step being selected*/
       if(this.state.stepNumber === step){
-        console.log("Set style " + step);
         jumpButtonStyle = {
-          fontWeight: "bolder"
+          fontWeight: "bolder",
+          color: "#372f5d",
+          borderWidth: "medium",
+          borderColor: "#372f5d",
         }
       }
       else{
-        console.log("Reset style " + step);
         jumpButtonStyle = {
-          fontWeight: "normal"
+          fontWeight: "normal",
+          color: "black",
+          borderWidth: "thin",
+          borderColor: "black",
         }
       }
       
