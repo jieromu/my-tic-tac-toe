@@ -138,6 +138,8 @@ class Game extends react.Component {
     
     const moves = historyBoards.map((squareArray, step) => {
       
+      console.log(this.state.stepNumber);
+      
       /*Retrieve the location of the square based on the step */
       const squareLocation = locationArray[step];
       
@@ -147,12 +149,33 @@ class Game extends react.Component {
       /*Retrieve the marker in the square location of the most recent square board */
       const marker = historyBoards[historyBoards.length-1].squares[squareLocation];
       
+      let jumpButtonStyle;
+      
+      /*To bold the jump button depending on which step being selected*/
+      if(this.state.stepNumber === step){
+        console.log("Set style " + step);
+        jumpButtonStyle = {
+          fontWeight: "bolder"
+        }
+      }
+      else{
+        console.log("Reset style " + step);
+        jumpButtonStyle = {
+          fontWeight: "normal"
+        }
+      }
+      
       const desc = step ?
                     "Go to Move #: " + step + "   (" + marker + " at " + position + ")" :
                     "Go to Game Start";
       return (
         <li key={step}>
-          <button onClick={()=> this.jumpTo(step)}>{desc}</button>
+          <button 
+            onClick={()=> this.jumpTo(step)}
+            style = {jumpButtonStyle}
+            >
+              {desc}
+          </button>
         </li>
       );
     });
