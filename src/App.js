@@ -31,28 +31,41 @@ function ResetButton(props) {
 
 class Board extends react.Component {
    
-  renderSquare(key,value) {
+  renderSquare(value) {
     return (
         <Square
-          key={key}
+          key={value}
           value={this.props.squares[value]}
           onClick={() => this.props.onClick(value)}
         />     
     );
   }
+  
+  createMatrix() {
+    /* Assume it is always a square matirx for the game */
+    const boardSize = this.props.squares.length;
+    const baseSize = Math.sqrt(boardSize);
+    
+    const rowArray = [];
+    for (let i=0;i<baseSize;i++){
+      const colArr = [];
+      for (let j=0;j<baseSize;j++){
+        colArr.push(j+(i*baseSize));
+      }
+      rowArray.push(colArr);
+    }
+    return rowArray;
+  }
     
   render() {
     
     /* Included codes to render the board squares by using loops and Array Maps */
-    const rowArray = [0,3,6];
-    const colArray = [0,1,2];
-    
-    const gameBoard = rowArray.map((rowValue, row) => {
-      const boardSquares = colArray.map((colValue, col) => {
-        const squareKey = col+rowValue;
-        const squareValue = colValue+rowValue;
+    const rowArray = this.createMatrix();
+                
+    const gameBoard = rowArray.map((colArray, row) => {
+      const boardSquares = colArray.map((colValue,) => {
         return (
-          this.renderSquare(squareKey, squareValue)
+          this.renderSquare(colValue)
         );
       });
       return (
